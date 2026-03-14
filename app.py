@@ -4,7 +4,7 @@ from PIL import Image
 
 genai.configure(api_key="AIzaSyCAA3vc8ybXfuGMhu68zCMzsvDWZf436qc")
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.title("SAKIB TECHNOLOGY METADATA HOUSE")
 
@@ -18,7 +18,7 @@ prompt = """
 You are a professional Adobe Stock image SEO specialist.
 
 STRICT RULES:
-- Title max 100 characters
+- Title max 120 characters
 - Description max 100 characters
 - Exactly 49 keywords
 - First keyword must match title start
