@@ -7,7 +7,7 @@ import os
 genai.configure(api_key=os.getenv("AIzaSyAh0ZwruNLMEenW6YoWgdtgxGcRzLqtXC0"))
 
 # -------- FAST MODEL --------
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 # -------- PAGE CONFIG --------
 st.set_page_config(
@@ -26,26 +26,34 @@ color:white;
 }
 
 .title{
-font-size:52px;
-font-weight:800;
+font-size:55px;
+font-weight:900;
 text-align:center;
 color:#FFD700;
-margin-bottom:5px;
+margin-bottom:10px;
 }
 
 .subtitle{
 text-align:center;
 font-size:18px;
-color:#cccccc;
-margin-bottom:35px;
+color:#dddddd;
+margin-bottom:40px;
+}
+
+.upload-box{
+background:#1b1f27;
+padding:20px;
+border-radius:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.4);
+margin-bottom:20px;
 }
 
 .resultbox{
 background:#1b1f27;
 padding:20px;
-border-radius:14px;
-box-shadow:0 0 15px rgba(0,0,0,0.5);
-margin-top:10px;
+border-radius:15px;
+box-shadow:0 0 12px rgba(0,0,0,0.5);
+margin-top:15px;
 }
 
 </style>
@@ -54,7 +62,7 @@ margin-top:10px;
 st.markdown('<div class="title">SAKIBUL METADATA STUDIO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Fast AI Metadata Generator for Adobe Stock</div>', unsafe_allow_html=True)
 
-# -------- IMAGE UPLOAD --------
+# -------- UPLOAD --------
 uploaded_files = st.file_uploader(
 "Upload Images",
 accept_multiple_files=True,
@@ -68,17 +76,14 @@ You are a professional Adobe Stock image SEO specialist.
 TITLE RULES
 Maximum 120 characters
 First keyword must start the title
-First 5 keywords must appear in title
 No commas in title
 
-DESCRIPTION RULES
-1–2 natural sentences
-Maximum 140 characters
+DESCRIPTION
+1–2 natural sentences under 140 characters
 
 KEYWORDS
 Exactly 49 keywords
 Comma separated
-No duplicates
 
 OUTPUT FORMAT
 
@@ -96,6 +101,9 @@ if uploaded_files:
 
         image = Image.open(file)
 
+        # ---- resize for speed ----
+        image = image.resize((800,800))
+
         col1, col2 = st.columns([1,2])
 
         with col1:
@@ -110,11 +118,4 @@ if uploaded_files:
 
                 st.markdown('<div class="resultbox">', unsafe_allow_html=True)
                 st.code(metadata)
-
-                st.download_button(
-                    label="Copy Metadata",
-                    data=metadata,
-                    file_name="metadata.txt"
-                )
-
                 st.markdown('</div>', unsafe_allow_html=True)
