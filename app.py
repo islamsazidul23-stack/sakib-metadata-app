@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 from PIL import Image
 
-genai.configure(api_key="AIzaSyDJ989h8dJOZHbwRlPNVAGRudTyT5HHPCs")
+genai.configure(api_key="AIzaSyCt44obRAOUrRxbxYdBqYxTUKdiF-phrnY")
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
