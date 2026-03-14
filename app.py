@@ -16,76 +16,28 @@ st.set_page_config(
     layout="wide"
 )
 
-# -------- LUXURY UI --------
-st.markdown("""
-<style>
+# -------- HEADER --------
+st.title("SAKIBUL METADATA STUDIO")
+st.caption("Fast AI Metadata Generator for Adobe Stock")
 
-body{
-background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
-}
-
-.title{
-font-size:55px;
-font-weight:900;
-text-align:center;
-color:#FFD700;
-margin-bottom:10px;
-}
-
-.subtitle{
-text-align:center;
-font-size:18px;
-color:#dddddd;
-margin-bottom:40px;
-}
-
-.upload-box{
-background:#1b1f27;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 10px rgba(0,0,0,0.4);
-margin-bottom:20px;
-}
-
-.resultbox{
-background:#1b1f27;
-padding:20px;
-border-radius:15px;
-box-shadow:0 0 12px rgba(0,0,0,0.5);
-margin-top:15px;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown('<div class="title">SAKIBUL METADATA STUDIO</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Fast AI Metadata Generator for Adobe Stock</div>', unsafe_allow_html=True)
-
-# -------- UPLOAD --------
+# -------- IMAGE UPLOAD --------
 uploaded_files = st.file_uploader(
-"Upload Images",
-accept_multiple_files=True,
-type=["jpg","jpeg","png"]
+    "Upload Images",
+    accept_multiple_files=True,
+    type=["jpg","jpeg","png"]
 )
 
 # -------- PROMPT --------
 prompt = """
 You are a professional Adobe Stock image SEO specialist.
 
-TITLE RULES
-Maximum 120 characters
-First keyword must start the title
-No commas in title
+Generate:
 
-DESCRIPTION
-1–2 natural sentences under 140 characters
+Title under 120 characters.
+Description under 140 characters.
+Exactly 49 keywords.
 
-KEYWORDS
-Exactly 49 keywords
-Comma separated
-
-OUTPUT FORMAT
+Format:
 
 Title:
 Description:
@@ -101,21 +53,13 @@ if uploaded_files:
 
         image = Image.open(file)
 
-        # ---- resize for speed ----
-        image = image.resize((800,800))
+        # resize for speed
+        image = image.resize((600,600))
 
-        col1, col2 = st.columns([1,2])
+        st.image(image, width=300)
 
-        with col1:
-            st.image(image, use_column_width=True)
+        with st.spinner("Generating metadata..."):
 
-        with col2:
+            response = model.generate_content([prompt, image])
 
-            with st.spinner("Generating metadata..."):
-
-                response = model.generate_content([prompt, image])
-                metadata = response.text
-
-                st.markdown('<div class="resultbox">', unsafe_allow_html=True)
-                st.code(metadata)
-                st.markdown('</div>', unsafe_allow_html=True)
+        st.code(response.text)
