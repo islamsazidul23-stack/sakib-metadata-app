@@ -1,88 +1,55 @@
 import streamlit as st
 import google.generativeai as genai
+import os
 from PIL import Image
 
-# 🔑 PUT YOUR API KEY HERE
-genai.configure(api_key="AIzaSyBoZoWk-zSTne5VygVnNo7Fs-MpyPgPbo8")
+# API KEY (from secrets)
+genai.configure(api_key=os.getenv("AIzaSyC_b9FPKVkeIbpdhanpomgPdUD_SHRY3M8"))
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash-latest")
 
-st.set_page_config(page_title="Sakib Technology", layout="wide")
+# UI CONFIG
+st.set_page_config(page_title="Sakib Technology PRO", layout="wide")
 
-st.title("SAKIB TECHNOLOGY")
-st.caption("Adobe Stock SEO Metadata Generator")
+st.title("🚀 SAKIB TECHNOLOGY PRO")
+st.caption("AI SEO Metadata Generator (Image + Video)")
 
-uploaded_files = st.file_uploader(
-    "Upload Images",
-    accept_multiple_files=True,
-    type=["jpg","jpeg","png"]
-)
+# MODE SELECT
+mode = st.selectbox("Select Mode", ["Image SEO", "Video SEO"])
 
+# FILE UPLOAD
+if mode == "Image SEO":
+    uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+else:
+    uploaded_file = st.file_uploader("Upload Video", type=["mp4", "mov", "avi"])
+
+# PROMPT
 prompt = """
-You are a professional Adobe Stock image SEO specialist.
+You are a professional stock SEO expert.
 
-Your task is to generate SEO-optimized metadata for an Adobe Stock image.
+Generate:
+Title (max 100 chars)
+Description (1-2 sentences, max 140 chars)
+49 keywords (comma separated)
 
-STRICT RULES (MUST FOLLOW):
-
-TITLE RULES:
-- Maximum 120 characters.
-- The FIRST PHRASE of the Title must be IDENTICAL to the FIRST keyword.
-- The FIRST 5 keywords MUST appear in the Title in the same order.
-- Title must clearly describe the main subject and visible context.
-- Use natural commercial stock language.
-- No brand names.
-- Do NOT mention AI, artificial, generated, render, illustration, photo, image, software.
-
-DESCRIPTION RULES:
-- 1–2 natural sentences.
-- Maximum 140 characters.
-- Describe subject + environment + commercial use.
-- No marketing claims.
-- No emotional exaggeration.
-
-KEYWORD RULES:
-- EXACTLY 49 keywords.
-- Comma-separated.
-- Include a comma after the last keyword.
-- No duplicate full keywords.
-- First 10 keywords must represent strong commercial search intent.
-- Use generic, evergreen, commercial language.
-- No brand names.
-- No forbidden terms.
-- All keywords must be visually provable.
-
-FINAL VALIDATION BEFORE OUTPUT:
-- Confirm first phrase of Title matches first keyword exactly.
-- Confirm first 5 keywords appear in Title in the same order.
-- Confirm exactly 49 keywords.
-- Confirm no duplicate full keywords.
-- Confirm Title under 100 characters.
-
-English language only.
-Present tense only.
-Suitable for Adobe Stock commercial licensing.
-
-INPUT:
-Describe the image clearly in ONE simple sentence.
-
-OUTPUT FORMAT (ONLY THIS):
-
-Title:
-Description:
-Keywords:
+No brand names.
+Commercial stock language only.
 """
 
-if uploaded_files:
+# PROCESS
+if uploaded_file:
+    st.success("File uploaded successfully!")
 
-    for file in uploaded_files:
+    if st.button("Generate Metadata"):
 
-        image = Image.open(file)
+        with st.spinner("Generating..."):
 
-        st.image(image, width=300)
+            if mode == "Image SEO":
+                image = Image.open(uploaded_file)
+                response = model.generate_content([prompt, image])
+            else:
+                # video case (basic text-based)
+                response = model.generate_content(prompt + " This is a video file.")
 
-        with st.spinner("Generating metadata..."):
-
-            response = model.generate_content([prompt, image])
-
-        st.text(response.text)
+            st.subheader("📌 Result")
+            st.text(response.text)
