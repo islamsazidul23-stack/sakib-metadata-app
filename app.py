@@ -3,9 +3,9 @@ import google.generativeai as genai
 from PIL import Image
 
 # 🔑 PUT YOUR API KEY HERE
-genai.configure(api_key="AIzaSyDfsKcX8-7fq-YYLIAGIlk4Cy6atiuBOTk")
+genai.configure(api_key="AIzaSyBoZoWk-zSTne5VygVnNo7Fs-MpyPgPbo8")
 
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.set_page_config(page_title="Sakib Technology", layout="wide")
 
