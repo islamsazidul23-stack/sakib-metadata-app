@@ -3,53 +3,38 @@ import google.generativeai as genai
 import os
 from PIL import Image
 
-# API KEY (from secrets)
-genai.configure(api_key=os.getenv("AIzaSyC_b9FPKVkeIbpdhanpomgPdUD_SHRY3M8"))
+# API KEY
+genai.configure(api_key=os.getenv("AIzaSyA9wBvtzlAn8jiRHS6Fr0g7NgEKzMyXs0Y"))
 
-model = genai.GenerativeModel("gemini-2.5-flash-")
+# FAST MODEL
+model = genai.GenerativeModel("gemini-2.5-flash")
 
-# UI CONFIG
-st.set_page_config(page_title="Sakib Technology PRO", layout="wide")
+# UI
+st.set_page_config(page_title="Sakib Technology", layout="wide")
 
-st.title("🚀 SAKIB TECHNOLOGY PRO")
-st.caption("AI SEO Metadata Generator (Image + Video)")
+st.title("SAKIB TECHNOLOGY")
+st.caption("Fast SEO Metadata Generator")
 
-# MODE SELECT
-mode = st.selectbox("Select Mode", ["Image SEO", "Video SEO"])
+# Upload
+uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 
-# FILE UPLOAD
-if mode == "Image SEO":
-    uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
-else:
-    uploaded_file = st.file_uploader("Upload Video", type=["mp4", "mov", "avi"])
-
-# PROMPT
+# FAST PROMPT
 prompt = """
-You are a professional stock SEO expert.
-
-Generate:
-Title (max 100 chars)
-Description (1-2 sentences, max 140 chars)
-49 keywords (comma separated)
-
-No brand names.
-Commercial stock language only.
+Generate SEO metadata for stock image:
+Title
+Description (1 short sentence)
+20 keywords
 """
 
-# PROCESS
+# Process
 if uploaded_file:
-    st.success("File uploaded successfully!")
+    image = Image.open(uploaded_file)
+    st.image(image, width=300)
 
-    if st. not button("Generate Metadata"):
+    if st.button("Generate Metadata"):
 
         with st.spinner("Generating..."):
+            response = model.generate_content([prompt, image])
 
-            if mode == "Image SEO":
-                image = Image.open(uploaded_file)
-                response = model.generate_content([prompt, image])
-            else:
-                # video case (basic text-based)
-                response = model.generate_content(prompt + " This is a video file.")
-
-            st.subheader("📌 Result")
-            st.text(response.text)
+        st.subheader("Result")
+        st.text(response.text)
