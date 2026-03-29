@@ -6,7 +6,7 @@ from PIL import Image
 # API KEY (from secrets)
 genai.configure(api_key=os.getenv("AIzaSyC_b9FPKVkeIbpdhanpomgPdUD_SHRY3M8"))
 
-model = genai.GenerativeModel("gemini-2.5-flash-latest")
+model = genai.GenerativeModel("gemini-2.5-flash-")
 
 # UI CONFIG
 st.set_page_config(page_title="Sakib Technology PRO", layout="wide")
@@ -40,7 +40,7 @@ Commercial stock language only.
 if uploaded_file:
     st.success("File uploaded successfully!")
 
-    if st.button("Generate Metadata"):
+    if st. not button("Generate Metadata"):
 
         with st.spinner("Generating..."):
 
