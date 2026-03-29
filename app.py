@@ -1,57 +1,59 @@
 import streamlit as st
 import google.generativeai as genai
-import os
 from PIL import Image
 
-# API KEY
-genai.configure(api_key=os.getenv("AIzaSyA9wBvtzlAn8jiRHS6Fr0g7NgEKzMyXs0Y"))
+# =========================
+# PUT YOUR API KEY HERE
+# =========================
+genai.configure(api_key="AIzaSyA9wBvtzlAn8jiRHS6Fr0g7NgEKzMyXs0Y")
 
-# FAST MODEL
+# Gemini Model
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-# UI
-st.set_page_config(page_title="Sakib Technology", layout="wide")
+st.set_page_config(page_title="SAKIB TECHNOLOGY METADATA HOUSE", layout="wide")
 
-st.title("SAKIB TECHNOLOGY")
-st.caption("Auto SEO Metadata Generator (Bulk Images)")
+st.title("SAKIB TECHNOLOGY METADATA HOUSE")
+st.write("Professional Adobe Stock Metadata Generator")
 
-# Upload multiple images
 uploaded_files = st.file_uploader(
     "Upload Images",
     accept_multiple_files=True,
-    type=["jpg", "jpeg", "png"]
+    type=["jpg","jpeg","png"]
 )
 
-# 🔥 CLEAN PROMPT (NO ,,,, ISSUE)
 prompt = """
-Generate Adobe Stock SEO metadata.
+You are a professional Adobe Stock image SEO specialist.
 
-RULES:
-- Title max 100 characters (clean, no commas, no symbols)
-- Description 1 short sentence
-- Generate exactly 25 keywords (comma separated)
+STRICT RULES (MUST FOLLOW):
+
+- Title max 100 characters
+- Description max 100 characters
+- Exactly 49 keywords
 - First keyword must match title start
+- First 5 keywords must appear in title
+- No AI words
 - No brand names
-- Use simple commercial language
+- English only
 
-FORMAT:
+OUTPUT FORMAT:
+
 Title:
 Description:
 Keywords:
 """
 
-# Generate for all images
 if uploaded_files:
 
-    if st.button("Generate All Metadata"):
+    for file in uploaded_files:
 
-        for file in uploaded_files:
-            image = Image.open(file)
+        image = Image.open(file)
 
-            st.image(image, width=250)
+        st.image(image, width=350)
 
-            with st.spinner(f"Processing {file.name}..."):
-                response = model.generate_content([prompt, image])
+        with st.spinner("Generating SEO metadata..."):
 
-            st.success(f"Done: {file.name}")
-            st.text(response.text)
+            response = model.generate_content([prompt, image])
+
+        st.success("Metadata Generated")
+
+        st.write(response.text)
