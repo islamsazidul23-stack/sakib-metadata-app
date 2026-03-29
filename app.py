@@ -13,28 +13,45 @@ model = genai.GenerativeModel("gemini-2.5-Fast")
 st.set_page_config(page_title="Sakib Technology", layout="wide")
 
 st.title("SAKIB TECHNOLOGY")
-st.caption("Fast SEO Metadata Generator")
+st.caption("Auto SEO Metadata Generator (Bulk Images)")
 
-# Upload
-uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
+# Upload multiple images
+uploaded_files = st.file_uploader(
+    "Upload Images",
+    accept_multiple_files=True,
+    type=["jpg", "jpeg", "png"]
+)
 
-# FAST PROMPT
+# 🔥 CLEAN PROMPT (NO ,,,, ISSUE)
 prompt = """
-Generate SEO metadata for stock image:
-Title
-Description (1 short sentence)
-20 keywords
+Generate Adobe Stock SEO metadata.
+
+RULES:
+- Title max 100 characters (clean, no commas, no symbols)
+- Description 1 short sentence
+- Generate exactly 25 keywords (comma separated)
+- First keyword must match title start
+- No brand names
+- Use simple commercial language
+
+FORMAT:
+Title:
+Description:
+Keywords:
 """
 
-# Process
-if uploaded_file:
-    image = Image.open(uploaded_file)
-    st.image(image, width=300)
+# Generate for all images
+if uploaded_files:
 
-    if st.button("Generate Metadata"):
+    if st.button("Generate All Metadata"):
 
-        with st.spinner("Generating..."):
-            response = model.generate_content([prompt, image])
+        for file in uploaded_files:
+            image = Image.open(file)
 
-        st.subheader("Result")
-        st.text(response.text)
+            st.image(image, width=250)
+
+            with st.spinner(f"Processing {file.name}..."):
+                response = model.generate_content([prompt, image])
+
+            st.success(f"Done: {file.name}")
+            st.text(response.text)
