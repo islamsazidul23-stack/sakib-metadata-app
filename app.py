@@ -7,7 +7,7 @@ from PIL import Image
 genai.configure(api_key=os.getenv("AIzaSyA9wBvtzlAn8jiRHS6Fr0g7NgEKzMyXs0Y"))
 
 # FAST MODEL
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-2.5-Fast")
 
 # UI
 st.set_page_config(page_title="Sakib Technology", layout="wide")
