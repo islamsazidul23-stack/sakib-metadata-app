@@ -28,7 +28,7 @@ STRICT RULES (MUST FOLLOW):
 
 -  Title max 120 characters (clean, no commas, no symbols)
 - Description max 100 characters
-- Exactly 49 keywords
+- Exactly 49 keywords """
 - First keyword must match title start
 - First 5 keywords must appear in title
 - No AI words
