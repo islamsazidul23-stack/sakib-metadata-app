@@ -5,7 +5,7 @@ from PIL import Image
 # =========================
 # PUT YOUR API KEY HERE
 # =========================
-genai.configure(api_key="AIzaSyDOUIrTmJd67VY8Q_YB-3P1_LVVwMJ8k6M")
+genai.configure(api_key="AIzaSyA2qULD_BuNd8vBmrk3FCFj8OBWb2eRrXQ")
 
 # Gemini Model
 model = genai.GenerativeModel("gemini-2.5-flash")
